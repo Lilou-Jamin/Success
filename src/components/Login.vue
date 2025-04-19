@@ -96,7 +96,7 @@ async function LoginA() {
 async function LoginC() {
   console.log("Connexion")
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: "collabo1@collabo.com",
+      email: "collabo@collabo.com",
       password: "password"
     })
 

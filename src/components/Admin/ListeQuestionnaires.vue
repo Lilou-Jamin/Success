@@ -82,15 +82,15 @@ onMounted(() => {
 
   <div class="main-content">
     <div class="Titre_et_Ajouter">
-      <h2>EVALUATION</h2>
+      <h2>QUESTIONNAIRES</h2>
       <img :src="Ajouter" @click="goToCreationQuestionnaire" />
     </div>
     <div class="liste-questionnaire-result-box">
       <table>
         <thead>
           <tr>
-            <th>Nom du Questionnaire</th>
-            <th>Classe Assigné</th>
+            <th>Nom</th>
+            <th>Classe assignée</th>
             <th>Date de création</th>
             <th>Code</th>
             <th>Action</th>

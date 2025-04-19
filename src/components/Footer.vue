@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-      <p>Tous droits réservés © 2024 Copyright: LesQuatre</p>
+      <p>Lilou Jamin</p>
     </footer>
   </template>
 

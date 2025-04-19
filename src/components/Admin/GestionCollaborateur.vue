@@ -3,7 +3,6 @@
   <div class="main-content">
       <h2>Gestion des collaborateurs</h2>
       <ButtonAdd :isEditable="false" :filename="Ajouter" :initialText="'Créer un utilisateur'" @click="showOverlay" />
-      <p>Cliquez sur un utilisateur pour le supprimer</p>
 
       <!-- Affichage des collaborateurs -->
       <div v-if="collaborateurs.length > 0">
@@ -100,15 +99,18 @@ const submitForm = async () => {
 
   // Création de l'utilisateur côté serveur + assignation au groupe 2 (collabo)
   try {
-    const { data, error: rpcError } = await supabase.rpc('create_user', {
-      user_email: mail.value,
-      user_password: password.value,
-      raw_meta_data: {
-        nom_utilisateur: nom.value,
-        prenom_utilisateur: prenom.value,
-        user_verified: true
-      }
-    });
+    const { data, error: rpcError } = await supabase.auth.signUp({
+        email: mail.value,
+        password: password.value,
+        options: {
+          data: {
+            nom_utilisateur: nom.value,
+            prenom_utilisateur: prenom.value,
+            user_verified: true
+          }
+        }
+      });
+
 
     if (rpcError) {
       console.error('Erreur lors de la création:', rpcError.message);

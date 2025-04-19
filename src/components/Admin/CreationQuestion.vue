@@ -7,9 +7,12 @@ import '@/assets/base.css';
 
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/clients/supabase.js';
+import { useRouter } from 'vue-router';
 
 const account = ref(null);
 const reponses = ref([]);
+const difficultequestion = ref("facile"); 
+const router = useRouter();
 
 const route = useRoute();
 
@@ -23,12 +26,13 @@ function deleteReponse(index) {
   reponses.value.splice(index, 1); // Supprime l'élément à l'index donné
 }
 
-
 async function addReponse() {
   const nouvelleReponse = document.getElementById("reponse").value;
   if (nouvelleReponse !== "") {
-    reponses.value.push({ libelle: nouvelleReponse, bonne: false }); // Utilisez 'bonne'
-    document.getElementById("reponse").value = ""; // Réinitialiser l'input
+    if (nouvelleReponse && nouvelleReponse.trim() !== "") {
+      reponses.value.push({ libelle: nouvelleReponse, bonne: false });
+    }
+  document.getElementById("reponse").value = ""; // Réinitialiser l'input
   } else {
     alert("Veuillez entrer une réponse valide.");
   }
@@ -50,7 +54,7 @@ onMounted(() => {
 async function handleSubmit() {
   const idquestionnaire = route.query.id;
   const titrequestion = document.getElementById("question-name").value;
-  const pointsquestion = document.getElementById("points").value;
+  const difficulte = difficultequestion.value;
 
   // Validation pour s'assurer qu'il y a une bonne réponse
   if (!reponses.value.some(reponse => reponse.bonne)) {
@@ -68,20 +72,22 @@ async function handleSubmit() {
     const { data, error } = await supabase.rpc('add_question', {
       id_questionnaire: idquestionnaire,
       titre_question: titrequestion,
-      points_question: pointsquestion,
+      difficulte_question: difficulte,
       reponses: reponsesFormatees // Envoi des réponses formatées
     });
 
     if (error) {
       console.error("Erreur lors de la création de la question :", error.message);
-      alert("Une erreur est survenue lors de la création de la question.");
+      alert(`Une erreur est survenue : ${error.message}`);
     } else {
       console.log("Question créée avec succès :", data);
       alert("La question a été créée avec succès !");
       // Réinitialiser les champs du formulaire
       document.getElementById("question-name").value = '';
-      document.getElementById("points").value = '1';
+      difficultequestion.value = 'facile';  // Par exemple, pour remettre la difficulté à "facile"
       reponses.value = [];
+      router.push('/ListeQuestionnaires');
+
     }
   } catch (err) {
     console.error("Erreur lors de l'appel à Supabase :", err);
@@ -94,15 +100,19 @@ async function handleSubmit() {
   <Header />
 
   <div class="main-content">
-    <h2>CREER UNE QUESTION</h2>
+    <h2>CRÉER UNE QUESTION</h2>
     <div class="question-result-box">
       <form @submit.prevent="handleSubmit">
         <div class="createQuestion">
-          <label class="selabel" for="question-name">Nom de la Question</label>
+          <label class="selabel" for="question-name">Nom de la question</label>
           <input class="seinput" id="question-name" type="text" placeholder="Nom de la Question" required>
 
-          <label class="selabel" for="points">Nombre de points</label>
-          <input class="seinput" id="points" type="number" name="points" placeholder="nombre de points" min="1" value="1" required>
+          <label class="selabel" for="difficulte" required>Difficulté</label>
+          <select v-model="difficultequestion" class="seinput" id="difficulte">
+            <option value="facile"> Facile </option>
+            <option value="intermediaire"> Intermédiaire </option>
+            <option value="difficile"> Difficile </option>
+          </select>
 
           <label class="selabel" for="reponse">Ajouter une réponse : <br>
             <input class="input_reponse" name="reponse" id="reponse" placeholder="Nouvelle reponse">

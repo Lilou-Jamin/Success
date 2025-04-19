@@ -111,7 +111,7 @@ getSession()  // On peut aussi appeler cette fonction dans onMounted si nécessa
     <Header/>
     <div class="main-content">
       <div class="Titre_et_Ajouter_Question">
-        <h2>GESTION QUESTIONS</h2>
+        <h2>QUESTIONS</h2>
         <img :src="Ajouter" @click="goToCreationQuestion" />
       </div>
     
@@ -119,8 +119,8 @@ getSession()  // On peut aussi appeler cette fonction dans onMounted si nécessa
           <table>
               <thead>
                   <tr>
-                      <th>Question n°</th>
-                      <th>Titre Question</th>
+                      <th>Numéro</th>
+                      <th>Intitulé</th>
                       <th>Action</th>
                   </tr>
               </thead>

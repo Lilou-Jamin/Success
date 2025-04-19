@@ -1,7 +1,6 @@
 <template>
     <Header/>
     <div class="main-content">
-        <!-- Titre avec le nom de la classe et bouton ajouter -->
         <h2>GESTION DE LA CLASSE {{ nomClasse }}</h2> 
         <ButtonAdd :isEditable="false" :filename="Ajouter" :initialText="'Ajoutez un élève'" @click="showOverlay"/>
         
@@ -32,7 +31,7 @@
             </button>
         </div>
 
-        <!-- Contenue de l'overlay quand l'on clique sur "Ajouter un élève" -->
+        <!-- Contenu de l'overlay quand l'on clique sur "Ajouter un élève" -->
         <Overlay v-if="overlayVisible" @close-overlay="hideOverlay">
             <div v-if="collaborateursNonClasse.length > 0">
                 <p>Sélectionnez les collaborateurs que vous souhaitez ajouter à la classe {{ nomClasse }}</p>
@@ -62,7 +61,7 @@
             </div>
             
             <!-- Message quand aucun utilisateur ne peux être ajouter -->
-            <p v-else>Aucun utilisateur ne peut être àjouter</p>
+            <p v-else>Aucun utilisateur ne peut être ajouté</p>
         </Overlay>
 
     </div>

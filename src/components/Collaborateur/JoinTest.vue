@@ -81,7 +81,7 @@ async function submitKey() {
 }
 
 .join-panel {
-    width: 500px;
+    min-width: 600px;
     padding: 50px 20px;
     background-color: #19376D; 
     border-radius: 10px;
@@ -91,11 +91,16 @@ async function submitKey() {
 }
 
 .join-panel h2 {
-    font-size: 1.5em;
+    font-size: 26px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
+.join-panel ::placeholder {
+    font-size: 20px;
+    margin-top: 5px;
+    color: #c9c9c9;
+}
 
 .key-input {
     width: 100%;
@@ -113,8 +118,7 @@ async function submitKey() {
     color: #ffffff;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 20px;
     cursor: pointer;
 }
 

@@ -27,8 +27,8 @@ const props = defineProps({
   display: flex;
 }
 .button-container h3 {
-    font-size: 32px;
-  }
+  font-size: 32px;
+}
     
 button.option {
   background-color: #5F6EB1;
@@ -47,7 +47,7 @@ button.option:hover {
 }
 
 button.option p {
-  font-size: 0.9em;
+  font-size: 20px;
   margin-top: 5px;
   color: #c9c9c9;
 }

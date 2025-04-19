@@ -1,11 +1,11 @@
 <template>
     <Header/>
-    <div class="main-content">
-        <h2>HISTORIQUE</h2>
-        <div class="each-questionnaire-passe" v-for="questionnaire in questionnairesPasses" :key="questionnaire.id_questionnaire">
-          <MenuSelect :title="`Questionnaire ${questionnaire.nom_questionnaire}`" :filename="statsImage" @click="goToEval(questionnaire.id_questionnaire, questionnaire.nom_questionnaire)"/>
-        </div>
-    </div>
+      <div class="main-content">
+          <h2>HISTORIQUE</h2>
+          <div class="each-questionnaire-passe" v-for="questionnaire in questionnairesPasses" :key="questionnaire.id_questionnaire">
+            <MenuSelect :title="`${questionnaire.nom_questionnaire}`" :filename="statsImage" @click="goToEval(questionnaire.id_questionnaire, questionnaire.nom_questionnaire)"/>
+          </div>
+      </div>
     <Footer/>
 </template>
 
@@ -68,21 +68,3 @@ function goToEval(idQuestionnaire, nomQuestionnaire) {
   });
 }
 </script>
-
-<style setup>
-.main-content{
-  padding: 50px;
-}
-
-.main-content h2{
-  color: #fff;
-  margin-bottom: 20px;
-  font-size: 32px;
-}
-
-.menu-buttons{
-  display: flex;
-  flex-direction: column;
-  gap: 2rem
-}
-</style>

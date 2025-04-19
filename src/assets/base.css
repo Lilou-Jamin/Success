@@ -17,4 +17,19 @@
     width: 100%;
   }
 
+  .main-content{
+    padding: 50px;
+  }
+  
+  .main-content h2{
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 26px;
+  }
+
+  .menu-buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem
+  }
   

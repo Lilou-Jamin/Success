@@ -39,32 +39,15 @@ async function getSession() {
 <template>
     <Header/>
 
-    <div class="main-content">
-      <h2>COLLABORATEUR</h2>
-      <div class="menu-buttons">
-        <MenuBouton title="Questionnaire" subtitle="Rejoindre un questionnaire" @click="goToJoinTest"/>
-        <MenuBouton title="Historique" subtitle="Voir les notes et résultats des questionnaires passés" @click="goToHistorique"/>
+      <div class="main-content">
+        <h2>COLLABORATEUR</h2>
+        <div class="menu-buttons">
+          <MenuBouton title="Questionnaire" subtitle="Rejoindre un questionnaire" @click="goToJoinTest"/>
+          <MenuBouton title="Historique" subtitle="Voir les notes et résultats des questionnaires passés" @click="goToHistorique"/>
+        </div>
       </div>
-    </div>
-<Footer/>
+      
+  <Footer/>
 </template>
-
-<style setup>
-.main-content{
-  padding: 50px;
-}
-
-.main-content h2{
-  color: #fff;
-  margin-bottom: 20px;
-  font-size: 32px;
-}
-
-.menu-buttons{
-  display: flex;
-  flex-direction: column;
-  gap: 2rem
-}
-</style>
 
 

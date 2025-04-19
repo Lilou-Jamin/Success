@@ -57,16 +57,6 @@ function goToCorrection() {
 </script>
 
 <style setup>
-.main-content{
-  padding: 50px;
-}
-
-.main-content h2{
-  color: #fff;
-  margin-bottom: 20px;
-  font-size: 32px;
-}
-
 .result-content {
   background-color: #193375;
   padding: 20px;

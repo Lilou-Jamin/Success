@@ -6,9 +6,12 @@ import '@/assets/base.css';
 
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/clients/supabase.js';
+import { useRouter } from 'vue-router';
 
 const account = ref(null);
 const classes = ref([]);
+const selectedClasses = ref([]);
+const router = useRouter();
 
 async function getSession() {
   try {
@@ -40,15 +43,18 @@ onMounted(() => {
 });
 
 async function handleSubmit() {
-  console.log("Formulaire soumis !");
+  const nomQuestionnaire = document.getElementById("questionnaire-name").value.trim();
+  let heure = parseInt(document.getElementById("heure").value) || 0;
+  let minutes = parseInt(document.getElementById("minutes").value) || 0;
+  const classeSelect = selectedClasses.value;
 
-  // Récupérer les valeurs du formulaire
-  const nomQuestionnaire = document.getElementById("questionnaire-name").value;
-  let heure = document.getElementById("heure").value || 0;
-  let minutes = document.getElementById("minutes").value || 0;
-  const classeSelect = document.getElementById("classe").value;
+  // Vérification que les classes sont sélectionnées
+  if (!classeSelect || classeSelect.length === 0) {
+    alert("Veuillez sélectionner au moins une classe.");
+    return;
+  }
 
-  // Validation des valeurs (Heure entre 0 et 23, Minute entre 0 et 59)
+  // Validation des valeurs d'heure et minute
   if (heure < 0 || heure > 23) {
     alert("L'heure doit être entre 0 et 23.");
     return;
@@ -59,40 +65,46 @@ async function handleSubmit() {
     return;
   }
 
-  // Formater le temps pour le backend (format 'HH:mm:ss')
-  const formattedTime = `${String(heure).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
-
-  if (!nomQuestionnaire || !classeSelect || (heure === "0" && minutes === "0")) {
+  // Vérification du nom du questionnaire et durée
+  if (!nomQuestionnaire || (heure === 0 && minutes === 0)) {
     alert("Veuillez remplir tous les champs correctement.");
     return;
   }
 
+  const formattedTime = `${String(heure).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+
   try {
+    // Appel RPC Supabase
     const { data, error } = await supabase.rpc('create_questionnaire', {
       matiere_questionnaire: nomQuestionnaire,
-      temps_pour_questionnaire: formattedTime, // Format attendu : 'HH:mm:ss'
-      id_groupe_select: classeSelect,
+      temps_pour_questionnaire: formattedTime,
+      id_groupes_select: classeSelect,
     });
 
     if (error) {
       console.error("Erreur lors de la création du questionnaire :", error.message);
       alert("Une erreur est survenue lors de la création du questionnaire.");
-    } else {
-      console.log("Questionnaire créé avec succès :", data);
-      alert("Le questionnaire a été créé avec succès !");
-      // Réinitialiser les champs du formulaire
-      document.getElementById("questionnaire-name").value = '';
-      document.getElementById("heure").value = '';
-      document.getElementById("minutes").value = '';
-      document.getElementById("classe").value = '';
+      return;
     }
+
+    console.log("Questionnaire créé avec succès :", data);
+    alert("Le questionnaire a été créé avec succès !");
+
+    // Réinitialisation du formulaire
+    document.getElementById("questionnaire-name").value = '';
+    document.getElementById("heure").value = '';
+    document.getElementById("minutes").value = '';
+    selectedClasses.value = [];
+    router.push('/ListeQuestionnaires');
+
   } catch (err) {
     console.error("Erreur lors de l'appel à Supabase :", err);
     alert("Une erreur inattendue est survenue.");
   }
 }
 
-// Fonction pour limiter les valeurs saisies pour l'heure et les minutes
+
+// Limite la valeur maximale pour les inputs
 function limitInput(event, max) {
   let value = event.target.value;
   if (value > max) {
@@ -101,15 +113,16 @@ function limitInput(event, max) {
 }
 </script>
 
+
 <template>
   <Header />
 
   <div class="main-content">
-    <h2>CREER UN QUESTIONNAIRE</h2>
+    <h2>CRÉER UN QUESTIONNAIRE</h2>
     <div class="priority-result-box">
       <form @submit.prevent="handleSubmit">
         <div class="createQuestionnaire">
-          <label class="selabel" for="questionnaire-name">Nom du Questionnaire</label>
+          <label class="selabel" for="questionnaire-name">Nom du questionnaire</label>
           <input class="seinput" id="questionnaire-name" type="text" placeholder="Nom du Questionnaire" required>
 
           <div class="time">
@@ -121,12 +134,18 @@ function limitInput(event, max) {
                    @input="limitInput($event, 59)">
           </div>
 
-          <label class="selabel" for="classe">Classe </label>
-          <select id="classe" name="classe" class="seselect" >
-            <option v-for="classe in classes" :key="classe.id_classe" :value="classe.id_classe">
-              {{ classe.nom_classe }}
-            </option>
-          </select>
+          <label class="selabel">Classes</label>
+          <div class="checkbox-group">
+            <div v-for="classe in classes" :key="classe.id_classe" class="checkbox-item">
+              <input 
+                type="checkbox"
+                :id="'classe-' + classe.id_classe"
+                :value="classe.id_classe"
+                v-model="selectedClasses"
+              />
+              <label :for="'classe-' + classe.id_classe">{{ classe.nom_classe }}</label>
+            </div>
+          </div>
           <br>
           <button class="sebutton" type="submit">Valider</button>
         </div>
